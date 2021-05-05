@@ -1,0 +1,268 @@
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import {
+  ViewPropTypes,
+  StyleSheet,
+  View,
+  Text,
+  Animated,
+  Dimensions,
+  Image,
+  Keyboard
+} from "react-native";
+
+import constants from "../../../../constants";
+import { moderateScale } from "../../../../helpers/ResponsiveFonts";
+
+const TOAST_ANIMATION_DURATION = 200000;
+
+const positions = {
+  TOP: 20,
+  BOTTOM: -20,
+  CENTER: 0
+};
+
+const durations = {
+  LONG: 7000,
+  SHORT: 2000
+};
+
+let styles = StyleSheet.create({
+  container: {
+    position: "absolute",
+    left: 0,
+    top: 0,
+    width: "100%",
+    minHeight: moderateScale(80),
+    paddingVertical: moderateScale(10),
+    alignItems: "flex-start"
+  },
+  notification: {
+    position: "absolute",
+    left: 0,
+    top: 0,
+    right: 0,
+    paddingTop: moderateScale(50),
+    paddingHorizontal: moderateScale(27),
+    flexDirection: "row",
+    justifyContent: "flex-start"
+  }
+});
+
+class ToastContainer extends Component {
+  static displayName = "ToastContainer";
+
+  static propTypes = {
+    ...ViewPropTypes,
+    containerStyle: ViewPropTypes.style,
+    duration: PropTypes.number,
+    visible: PropTypes.bool,
+    position: PropTypes.number,
+    animation: PropTypes.bool,
+    shadow: PropTypes.bool,
+    keyboardAvoiding: PropTypes.bool,
+    backgroundColor: PropTypes.string,
+    opacity: PropTypes.number,
+    shadowColor: PropTypes.string,
+    textColor: PropTypes.string,
+    textStyle: Text.propTypes.style,
+    delay: PropTypes.number,
+    hideOnPress: PropTypes.bool,
+    onPress: PropTypes.func,
+    onHide: PropTypes.func,
+    onHidden: PropTypes.func,
+    onShow: PropTypes.func,
+    onShown: PropTypes.func
+  };
+
+  static defaultProps = {
+    visible: false,
+    duration: durations.SHORT,
+    animation: true,
+    shadow: true,
+    position: positions.BOTTOM,
+    opacity: 0.8,
+    delay: 0,
+    hideOnPress: true,
+    keyboardAvoiding: true
+  };
+  _notification;
+  constructor() {
+    super(...arguments);
+    const window = Dimensions.get("window");
+    this.state = {
+      visible: this.props.visible,
+      opacity: new Animated.Value(0),
+      offset: new Animated.Value(0),
+      windowWidth: window.width,
+      windowHeight: window.height,
+      keyboardScreenY: window.height
+    };
+  }
+
+  componentDidMount = () => {
+    Dimensions.addEventListener("change", this._windowChanged);
+    if (this.props.keyboardAvoiding) {
+      Keyboard.addListener(
+        "keyboardDidChangeFrame",
+        this._keyboardDidChangeFrame
+      );
+    }
+    // if (this.state.visible) {
+    //     this._showTimeout = setTimeout(() => this._show(), this.props.delay);
+    // }
+  };
+
+  componentDidUpdate = prevProps => {
+    if (this.props.visible !== prevProps.visible) {
+      if (this.props.visible) {
+        clearTimeout(this._showTimeout);
+        clearTimeout(this._hideTimeout);
+        // this._showTimeout = setTimeout(() => this._show(), this.props.delay);
+      } else {
+        this._hide();
+      }
+
+      this.setState({
+        visible: this.props.visible
+      });
+    }
+  };
+
+  componentWillUnmount = () => {
+    this._hide();
+    Dimensions.removeEventListener("change", this._windowChanged);
+    Keyboard.removeListener(
+      "keyboardDidChangeFrame",
+      this._keyboardDidChangeFrame
+    );
+  };
+
+  _animating = false;
+  _root = null;
+  _hideTimeout = null;
+  _showTimeout = null;
+  _keyboardHeight = 0;
+
+  _windowChanged = ({ window }) => {
+    this.setState({
+      windowWidth: window.width,
+      windowHeight: window.height
+    });
+  };
+
+  _keyboardDidChangeFrame = ({ endCoordinates }) => {
+    this.setState({
+      keyboardScreenY: endCoordinates.screenY
+    });
+  };
+
+  _show = () => {
+    clearTimeout(this._showTimeout);
+    if (!this._animating) {
+      clearTimeout(this._hideTimeout);
+
+      this._notification.getNode().measure(height => {
+        this.state.offset.setValue(height * -1);
+        Animated.sequence([
+          Animated.parallel([
+            Animated.timing(this.state.opacity, {
+              toValue: 1,
+              duration: 300
+            }),
+            Animated.timing(this.state.offset, {
+              toValue: 0,
+              duration: 300
+            })
+          ]),
+          Animated.delay(this.props.duration),
+          Animated.parallel([
+            Animated.timing(this.state.opacity, {
+              toValue: 0,
+              duration: 300
+            }),
+            Animated.timing(this.state.offset, {
+              toValue: height * -1,
+              duration: 300
+            })
+          ])
+        ]).start();
+      });
+    }
+  };
+
+  _hide = () => {
+    clearTimeout(this._showTimeout);
+    clearTimeout(this._hideTimeout);
+
+    if (!this._animating) {
+      if (this._root) {
+        this._root.setNativeProps({
+          pointerEvents: "none"
+        });
+      }
+
+      if (this.props.onHide) {
+        this.props.onHide(this.props.siblingManager);
+      }
+
+      Animated.sequence([
+        Animated.parallel([
+          Animated.timing(this.state.offset, {
+            toValue: 0,
+            duration: this.props.animation ? TOAST_ANIMATION_DURATION : 0
+          }),
+          Animated.timing(this.state.opacity, {
+            toValue: 0,
+            duration: this.props.animation ? TOAST_ANIMATION_DURATION : 0
+          })
+        ])
+      ]).start(({ finished }) => {
+        if (finished) {
+          this._animating = false;
+          this.props.onHidden && this.props.onHidden(this.props.siblingManager);
+        }
+      });
+    }
+  };
+
+  render() {
+    const { backgroundColor } = this.props;
+
+    if (this.state.visible)
+      setTimeout(() => {
+        this.setState({
+          visible: false
+        });
+      }, durations.LONG);
+
+    return this.state.visible || this._animating ? (
+      <View
+        style={[
+          styles.container,
+          styles.notification,
+          backgroundColor && { backgroundColor }
+        ]}
+      >
+        <View>
+          <Image source={this.props.children[0]} resizeMode={"contain"} />
+        </View>
+        <View style={{ marginLeft: moderateScale(16) }}>
+          <Text
+            style={{
+              color: constants.Colors.white,
+              fontSize: moderateScale(12),
+              ...constants.Fonts.Regular
+            }}
+            numberOfLines={2}
+          >
+            {this.props.children[1]}
+          </Text>
+        </View>
+      </View>
+    ) : null;
+  }
+}
+
+export default ToastContainer;
+export { positions, durations };

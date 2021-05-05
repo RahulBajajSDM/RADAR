@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "511180621388",
+    "firebase_url": "https://radar-34472.firebaseio.com",
+    "project_id": "radar-34472",
+    "storage_bucket": "radar-34472.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:511180621388:android:45ffa856532050e84556e9",
+        "android_client_info": {
+          "package_name": "com.smartdata.radar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "511180621388-qots8gmjllc68bnoel5of8pnc0212dn5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAr2QFv4qqHsPwCxcrHNPq3i-SJRc3qvTs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "511180621388-qots8gmjllc68bnoel5of8pnc0212dn5.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "511180621388-f2fjp7uf78jdafrag3au101sfsf4v05u.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.smartdata.radar"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
