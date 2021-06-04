@@ -23,12 +23,14 @@ import {
   configureLocationStateHandler,
   removeLocationStateListener,
   configureBackgroundLocationTracker,
+  calculateUserinPolygon,
 } from "../../../helpers/LocationTracker";
 import LocationServicesDialogBox from "react-native-android-location-services-dialog-box";
 import BluetoothStateManager, {
   BluetoothState,
 } from "react-native-bluetooth-state-manager";
 import BackgroundGeolocation from "@mauron85/react-native-background-geolocation";
+import GeoFencing from "react-native-geo-fencing";
 
 import {
   getHotspotsApi,
@@ -39,6 +41,8 @@ import {
   saveArogyaRequestIdApi,
   employeesLastActiveApi,
   careteDashboardAlerts,
+  getArogyaUserStatus,
+  getArogyaUserStatusByRequestId,
 } from "../../../actions/Home/index";
 import {
   moderateScale,
@@ -55,6 +59,7 @@ import { getSocket } from "../../../helpers/AppSocket";
 const WINDOW_WIDTH = Dimensions.get("window").width;
 const WINDOW_HEIGHT = Dimensions.get("window").height;
 let location_count = 0;
+let location_Android = 0;
 class Tab3 extends React.Component {
   constructor(props) {
     super(props);
@@ -65,8 +70,15 @@ class Tab3 extends React.Component {
       userAarogyaRequestStatus: "",
       userAarogyaStatus: {},
       showBLEModal: false,
+      arogyaSetuButton: false,
     };
     this.socket = getSocket();
+    AppState.addEventListener("change", this._handleAppStateChange);
+
+    DeviceEventEmitter.addListener(
+      "locationProviderStatusChange",
+      this.handleWhenLocationsChanged
+    );
   }
   _handleAppStateChange = (nextAppState) => {
     console.log("location_off", location_count);
@@ -112,26 +124,23 @@ class Tab3 extends React.Component {
       lastActive: newDateTimestamp,
     };
 
-    this.performApiCall();
-    // AppState.addEventListener("change", this._handleAppStateChange);
+    // console.log("cdm called", renderCall);
 
-    // DeviceEventEmitter.addListener(
-    //   "locationProviderStatusChange",
-    //   this.handleWhenLocationsChanged
-    // );
+    // renderCall = renderCall + 1;
+    // this.performApiCall();
 
-    // await this.configureLocation();
+    await this.configureLocation();
 
-    // /** ---------------------------------------------------------------- */
-    // //blueToth Directly on Tested on Android
-    // await this.requestBlueoothAccess();
+    /** ---------------------------------------------------------------- */
+    //blueToth Directly on Tested on Android
+    await this.requestBlueoothAccess();
 
-    // setTimeout(() => {
-    //   this.bluetoothStateChangeSubscription = BluetoothStateManager.onStateChange(
-    //     this.onBluetoothStateChange,
-    //     true
-    //   );
-    // }, 5000);
+    setTimeout(() => {
+      this.bluetoothStateChangeSubscription = BluetoothStateManager.onStateChange(
+        this.onBluetoothStateChange,
+        true
+      );
+    }, 5000);
   }
   async performApiCall() {
     let {
@@ -221,7 +230,10 @@ class Tab3 extends React.Component {
     console.log("status", status);
     if (!status.enabled) {
       console.log("sendDenied in Api");
+      location_Android += 1;
       this.handleBlueTooth_LocationStatus("location");
+    } else {
+      location_Android = 0;
     }
   };
 
@@ -280,11 +292,11 @@ class Tab3 extends React.Component {
       if (!status.locationServicesEnabled) {
         console.log("we need to have location android menu enable");
         this.enableLocations();
-        this.performApiCall();
+        // this.performApiCall();
       } else {
         console.log("all is fine , u can send the location to server");
         this.enableLocations();
-        this.performApiCall();
+        // this.performApiCall();
       }
     });
   };
@@ -300,9 +312,25 @@ class Tab3 extends React.Component {
       employeeId: userData.id,
       type: fields,
     };
-    this.props.careteDashboardAlerts(params, (cb) => {
-      console.log("hello", cb);
-    });
+    if (fields == "bluetooth") {
+      this.props.careteDashboardAlerts(params, (cb) => {
+        console.log("hello", cb);
+      });
+    } else {
+      console.log(location_Android, "location_Android");
+      if (Platform.OS == "android") {
+        if (location_Android == 1) {
+          this.props.careteDashboardAlerts(params, (cb) => {
+            console.log("hello", cb);
+            location_Android = 0;
+          });
+        }
+      } else {
+        this.props.careteDashboardAlerts(params, (cb) => {
+          console.log("hello", cb);
+        });
+      }
+    }
   };
 
   componentWillUnmount() {
@@ -349,7 +377,6 @@ class Tab3 extends React.Component {
     } = this.props;
     let param = { agencyId: userData.agencyId._id };
 
-    console.log("props hotspots", hotspots);
     this.props.getHotspotsApi(
       param,
       this.props.componentId,
@@ -357,46 +384,188 @@ class Tab3 extends React.Component {
       (_) => {
         configureLocationTracker((locationsCb) => {
           console.log("location call back ", locationsCb);
-          // if (locationsCb == false) {
-          //   // this.handleBlueTooth_LocationStatus("location");
-          // } else {
-          var hotspotsData = Object.assign({}, this.props.hotspots);
-          var { hotspotsArr } = hotspotsData;
-          var hotspotsArray = [...hotspotsArr];
+          if (locationsCb == false) {
+            this.handleBlueTooth_LocationStatus("location");
+          } else {
+            var hotspotsData = Object.assign({}, this.props.hotspots);
+            var { hotspotsArr } = hotspotsData;
+            var hotspotsArray = [...hotspotsArr];
 
-          this.setState({ hotspots: hotspotsArray });
-          this.setState({ locations: locationsCb });
-          let array = [];
-          hotspotsArray.forEach((hotspotVal) => {
-            var hotspot = { ...hotspotVal };
-            let dis = getDistanceFromLatLonInKm(
-              hotspot.coordinate.lat,
-              hotspot.coordinate.lng,
-              locationsCb[0].latitude,
-              locationsCb[0].longitude
-            );
-            hotspot.dis = dis;
-            console.log("distanceCalc", dis);
-            console.log("hotspotVal", hotspot);
-            if (dis * 1000 <= hotspot.radius) {
-              /* isEntered: false or null - Enter Record inserted*/
-              if (hotspot.isEntered !== true) {
-                hotspot.isEntered = true;
-                this.hitEnteredExitedApi(hotspot);
+            this.setState({ hotspots: hotspotsArray });
+            this.setState({ locations: locationsCb });
+            let array = [];
+            let current_loc = {
+              lat: locationsCb[0].latitude,
+              lng: locationsCb[0].longitude,
+            };
+
+            hotspotsArr.forEach((hotspotVal) => {
+              var hotspot = { ...hotspotVal };
+              console.log("hotspot type ==--------------", hotspot.type);
+
+              if (hotspot.type != undefined) {
+                console.log("checking the tyope of Polygon ");
+                if (hotspot.type == "Polygon") {
+                  if (hotspot.pointList != undefined) {
+                    console.log("checking the pointList of Polygon ");
+                    console.log("currentHotsPot", hotspot);
+                    console.log("current_loc", current_loc);
+
+                    if (hotspot.pointList.length > 0) {
+                      console.log("pointlist length is greater than 0");
+                      calculateUserinPolygon(
+                        hotspot.pointList,
+                        current_loc
+                      ).then((result) => {
+                        console.log("result of point in polygon", result);
+                        if (result) {
+                          if (hotspot.isEntered !== true) {
+                            hotspot.isEntered = true;
+                            this.hitEnteredExitedApi(hotspot);
+                          }
+                        } else {
+                          /* isEntered: true - Exit Record inserted*/
+                          if (hotspot.isEntered === true) {
+                            hotspot.isEntered = false;
+                            this.hitEnteredExitedApi(hotspot);
+                          }
+                        }
+                      });
+                    } else {
+                      console.log("pointLs=ist length is less than 0 ");
+                    }
+                  }
+                } else if (hotspot.type == "Circle") {
+                  console.log("point type is circle ");
+                  let dis = getDistanceFromLatLonInKm(
+                    hotspot.coordinate.lat,
+                    hotspot.coordinate.lng,
+                    locationsCb[0].latitude,
+                    locationsCb[0].longitude
+                  );
+                  hotspot.dis = dis;
+                  // console.log("distanceCalc", dis);
+                  // console.log("hotspotVal", hotspot);
+                  if (dis * 1000 <= hotspot.radius) {
+                    /* isEntered: false or null - Enter Record inserted*/
+                    if (hotspot.isEntered !== true) {
+                      hotspot.isEntered = true;
+                      this.hitEnteredExitedApi(hotspot);
+                    }
+                  } else {
+                    /* isEntered: true - Exit Record inserted*/
+                    if (hotspot.isEntered === true) {
+                      hotspot.isEntered = false;
+                      this.hitEnteredExitedApi(hotspot);
+                    }
+                  }
+                }
+              } else {
+                console.log("type is undefined");
+                let dis = getDistanceFromLatLonInKm(
+                  hotspot.coordinate.lat,
+                  hotspot.coordinate.lng,
+                  locationsCb[0].latitude,
+                  locationsCb[0].longitude
+                );
+                hotspot.dis = dis;
+                // console.log("distanceCalc", dis);
+                // console.log("hotspotVal", hotspot);
+                if (dis * 1000 <= hotspot.radius) {
+                  /* isEntered: false or null - Enter Record inserted*/
+                  if (hotspot.isEntered !== true) {
+                    hotspot.isEntered = true;
+                    this.hitEnteredExitedApi(hotspot);
+                  }
+                } else {
+                  /* isEntered: true - Exit Record inserted*/
+                  if (hotspot.isEntered === true) {
+                    hotspot.isEntered = false;
+                    this.hitEnteredExitedApi(hotspot);
+                  }
+                }
               }
-            } else {
-              /* isEntered: true - Exit Record inserted*/
-              if (hotspot.isEntered === true) {
-                hotspot.isEntered = false;
-                this.hitEnteredExitedApi(hotspot);
-              }
-            }
-            array.push(hotspot);
-          });
-          this.props.updateHotspots(array);
-          this.setState({ hotspots: array });
-          // }
+
+              // if (hotspot.pointList != undefined) {
+              // } else {
+              // }
+              array.push(hotspot);
+            });
+            console.log("array is .............", array);
+            setTimeout(() => {
+              this.props.updateHotspots(array);
+              this.setState({ hotspots: array });
+            }, 2000);
+          }
         });
+      }
+    );
+  }
+  hitArogyaSetuUserStatusApiNew() {
+    let {
+      user: { userData },
+      aarogyaSetu,
+    } = this.props;
+    this.setState({ arogyaSetuButton: true });
+    this.props.getArogyaUserStatus(
+      { employeeId: userData.id },
+      this.props.componentId,
+      (cb) => {
+        console.log("cb", cb);
+        if (cb.status == 200) {
+          //pending
+          this.setState({
+            arogyaSetuButton: true,
+            userAarogyaRequestStatus: "Pending",
+            userAarogyaStatus: "",
+          });
+          console.log("arogyasetuId", cb.data.arogyaRequestIds);
+
+          var refreshIntervalId = setInterval(() => {
+            //hit the Api to show the status
+            this.props.getArogyaUserStatusByRequestId(
+              cb.data.arogyaRequestIds,
+              (cb) => {
+                console.log("Response of getArogyaUserStatusByRequestId", cb);
+
+                // this.setState({
+                //   userAarogyaRequestStatus: cb.request_status,
+                // });
+                if (cb.status == 200) {
+                  if (cb.data.request_status !== "Pending") {
+                    clearInterval(refreshIntervalId);
+                    if (cb.data.request_status == "Denied") {
+                      this.setState({
+                        userAarogyaStatus: "",
+                        arogyaSetuButton: false,
+                        userAarogyaRequestStatus: cb.data.request_status,
+                      });
+                    } else if (cb.data.request_status == "Approved") {
+                      let token = cb.data.as_status;
+                      if (token !== "") {
+                        var decoded = jwt_decode(token);
+                        console.log(decoded);
+                        this.setState({
+                          userAarogyaStatus: cb.data.as_status,
+                          arogyaSetuButton: false,
+                          userAarogyaRequestStatus: cb.data.decodedData.message,
+                        });
+                      }
+                    }
+                  } else {
+                    this.setState({ userAarogyaStatus: "" });
+                  }
+                }
+              }
+            );
+          }, 5000);
+        } else {
+          this.setState({
+            arogyaSetuButton: false,
+            userAarogyaRequestStatus: cb.data.error.error_message,
+          });
+          //message
+        }
       }
     );
   }
@@ -501,6 +670,8 @@ class Tab3 extends React.Component {
         _id: userData.agencyId._id,
       },
     };
+
+    console.log("param", param);
     this.props.createEmployeesActivitiesApi(
       param,
       this.props.componentId,
@@ -508,11 +679,6 @@ class Tab3 extends React.Component {
         console.log("enterExitAPIResponse", fn);
       }
     );
-  }
-
-  componentWillUnmount() {
-    // unregister all event listeners
-    // BackgroundGeolocation.removeAllListeners();
   }
 
   renderModal() {
@@ -579,11 +745,12 @@ class Tab3 extends React.Component {
       hotspots,
       userAarogyaRequestStatus,
       userAarogyaStatus,
+      arogyaSetuButton,
     } = this.state;
-    console.log("location_count", location_count);
     let {
       loader: { getHotspotsLoader },
     } = this.props;
+    console.log("location_Android", location_Android);
     return (
       <View style={styles.container}>
         <View style={styles.container}>
@@ -592,7 +759,9 @@ class Tab3 extends React.Component {
           >
             <TouchableOpacity
               style={styles.myActivityButton}
-              onPress={() => this.hitArogyaSetuUserStatusApi()}
+              disabled={arogyaSetuButton}
+              // onPress={() => this.hitArogyaSetuUserStatusApi()}
+              onPress={() => this.hitArogyaSetuUserStatusApiNew()}
               // onPress={() =>
               //   this.props.pushToParticularScreen(
               //     this.props.componentId,
@@ -719,6 +888,8 @@ const mapDispatchToProps = {
   getAarogyaToken,
   employeesLastActiveApi,
   careteDashboardAlerts,
+  getArogyaUserStatus,
+  getArogyaUserStatusByRequestId,
 };
 
 export default connect(

@@ -10,8 +10,8 @@
 // const apiServer = "7hyhccb00d.execute-api.us-east-1.amazonaws.com";
 // const apiServer = "mean.stagingsdei.com:6067";
 // const apiServer = "mean.stagingsdei.com:6073";
-// const apiServer = "www.radarappsdei.org/api"; //working  url
-const apiServer = "7bd900e03531.ngrok.io"; //testing url for supportStaff and Vendors
+const apiServer = "www.radarappsdei.org/api"; //working  url
+// const apiServer = "2643c1abd629.ngrok.io"; //testing url for supportStaff and Vendors
 //https://www.radarappsdei.org/api
 // const apiServer = "277ad79a96d9.ngrok.io"
 //uncomment these four line for use staging
@@ -21,6 +21,8 @@ const SDEiApiKey =
   "Basic QXV0aG9yaXphdGlvbjpCYXNpYyBkR0Y0YVRwaGNIQnNhV05oZEdsdmJnPT0=";
 const SDEIApiServer = "www.sdeivp.com/apiLoginRadar.php";
 //https://www.radarappsdei.org/api
+const infermedicaApiUrl = "https://api.infermedica.com/covid19/";
+
 const running_url = apiServer,
   http_url = `https//${running_url}`,
   SOCKET_BASE_URL = `https://${running_url}`,
@@ -58,5 +60,9 @@ export default class Connection {
   }
   static getErroUrl() {
     return `${apiBase_url}failure.html`;
+  }
+
+  static getInfermedicaUrl() {
+    return infermedicaApiUrl;
   }
 }

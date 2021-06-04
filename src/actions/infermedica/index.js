@@ -40,7 +40,7 @@ export const getCovidAssessmentQus = (evidence = []) => {
         headers
       )
         .then((response) => {
-          console.log("response of Question ------------", response);
+          console.log("response of Question -------", response);
           const { question, should_stop } = response;
 
           dispatch({

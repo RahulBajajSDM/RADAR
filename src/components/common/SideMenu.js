@@ -7,7 +7,7 @@ import {
   StyleSheet,
   Platform,
   Linking,
-  Image
+  Image,
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { connect } from "react-redux";
@@ -24,7 +24,7 @@ class SideMenu extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      settings: true
+      settings: true,
     };
   }
 
@@ -58,11 +58,11 @@ class SideMenu extends Component {
 
   exitHotspots() {
     let {
-      hotspots: { hotspotsArr }
+      hotspots: { hotspotsArr },
     } = this.props;
     console.log("11", hotspots);
     console.log("22", hotspotsArr);
-    hotspotsArr.forEach(hotspotVal => {
+    hotspotsArr.forEach((hotspotVal) => {
       var hotspot = { ...hotspotVal };
       /* isEntered: true - Exit Record inserted*/
       if (hotspot.isEntered === true) {
@@ -75,7 +75,7 @@ class SideMenu extends Component {
 
   hitEnteredExitedApi(hotspot) {
     let {
-      user: { userData }
+      user: { userData },
     } = this.props;
     console.log("EnterExitApi", hotspot);
     let param = {
@@ -87,23 +87,23 @@ class SideMenu extends Component {
         radius: hotspot.radius,
         coordinate: hotspot.coordinate,
         name: hotspot.name,
-        address: hotspot.address
+        address: hotspot.address,
       },
       employeeDetails: {
         _id: userData.id,
         firstName: userData.firstName,
         lastName: userData.lastName,
         email: userData.email,
-        userType: userData.userType
+        userType: userData.userType,
       },
       agencyDetails: {
-        _id: userData.agencyId._id
-      }
+        _id: userData.agencyId._id,
+      },
     };
     this.props.appActions.createEmployeesActivitiesApi(
       param,
       this.props.componentId,
-      fn => {
+      (fn) => {
         console.log("enterExitAPIResponse", fn);
       }
     );
@@ -118,8 +118,8 @@ class SideMenu extends Component {
     let { settings } = this.state;
     this.setState({ settings: !settings });
   }
-  socialIconClick = url => {
-    Linking.canOpenURL(url).then(supported => {
+  socialIconClick = (url) => {
+    Linking.canOpenURL(url).then((supported) => {
       if (supported) {
         Linking.openURL(url);
       } else {
@@ -130,7 +130,7 @@ class SideMenu extends Component {
   render() {
     let { settings } = this.state,
       {
-        user: { userData }
+        user: { userData },
       } = this.props,
       menu = [
         {
@@ -138,7 +138,7 @@ class SideMenu extends Component {
           // icon: Constants.Images.SideMenu.Forward,
           enable: true,
           marginTop: false,
-          onPress: () => {}
+          onPress: () => {},
         },
         // {
         //   title: "Settings",
@@ -166,7 +166,14 @@ class SideMenu extends Component {
           title: Constants.Strings.SideMenu.Settings.EditMyProfile,
           enable: true,
           marginTop: true,
-          onPress: () => this.pushToParticularScreen("EditProfile", false)
+          onPress: () => this.pushToParticularScreen("EditProfile", false),
+        },
+
+        {
+          title: Constants.Strings.SideMenu.Settings.COVIDAssesment,
+          enable: true,
+          marginTop: true,
+          onPress: () => this.pushToParticularScreen("CovidAssesment", false),
         },
         // {
         //   title: Constants.Strings.SideMenu.Settings.ChangeMyPassword,
@@ -178,16 +185,16 @@ class SideMenu extends Component {
           title: Constants.Strings.SideMenu.Faq,
           enable: true,
           marginTop: true,
-          onPress: () => {}
-          //   this.pushToParticularScreen("WebView", false, {
-          //   uri: Constants.Url.FAQs,
-          // }),
+          onPress: () => {
+            console.log("I am here ---------------");
+            // this.pushToParticularScreen("CovidAssesment", false);
+          },
         },
         {
           title: Constants.Strings.SideMenu.privacyPolicy,
           enable: true,
           marginTop: false,
-          onPress: () => {}
+          onPress: () => {},
           // this.pushToParticularScreen("WebView", false, {
           //   uri: Constants.Url.privacyPolicy,
           // }),
@@ -196,7 +203,7 @@ class SideMenu extends Component {
           title: Constants.Strings.SideMenu.TermsofService,
           enable: true,
           marginTop: false,
-          onPress: () => {}
+          onPress: () => {},
           // this.pushToParticularScreen("WebView", false, {
           //   uri: Constants.Url.termsofService,
           // }),
@@ -207,15 +214,15 @@ class SideMenu extends Component {
           marginTop: true,
           onPress: () => {
             this.onLogoutPress();
-          }
-        }
+          },
+        },
       ];
     if (userData && userData.isLocationAdmin) {
       menu.splice(1, 0, {
         title: Constants.Strings.SideMenu.Settings.AlertActivity,
         enable: true,
         marginTop: true,
-        onPress: () => this.pushToParticularScreen("AlertActivity", false)
+        onPress: () => this.pushToParticularScreen("AlertActivity", false),
       });
     }
 
@@ -231,11 +238,11 @@ class SideMenu extends Component {
                     Styles.menuButton2,
                     {
                       borderBottomWidth:
-                        item.title == "Settings" && settings ? 0 : 1
+                        item.title == "Settings" && settings ? 0 : 1,
                     },
                     index === 0 && Styles.menuButton3,
                     !item.enable && Styles.disabledItem,
-                    { marginTop: item.marginTop ? 20 : 0 }
+                    { marginTop: item.marginTop ? 20 : 0 },
                   ]}
                   onPress={() => item.onPress()}
                   disabled={!item.enable}
@@ -261,8 +268,8 @@ class SideMenu extends Component {
                           Styles.menuButtonSetting,
                           {
                             borderBottomWidth:
-                              subIndex == item.subMenu.length - 1 ? 1 : 0
-                          }
+                              subIndex == item.subMenu.length - 1 ? 1 : 0,
+                          },
                         ]}
                         onPress={() => subItem.onPress()}
                         key={subIndex}
@@ -271,7 +278,7 @@ class SideMenu extends Component {
                           style={[
                             Styles.menuText,
                             Styles.subMenuText,
-                            Styles.menuSubText
+                            Styles.menuSubText,
                           ]}
                         >
                           {subItem.title}
@@ -297,15 +304,15 @@ class SideMenu extends Component {
               ? Constants.BaseStyle.DEVICE_HEIGHT > 800
                 ? moderateScale(30)
                 : 0
-              : moderateScale(50)
+              : moderateScale(50),
           }}
         ></View>
       </ScrollView>
     );
   }
 }
-const mapDispatchToProps = dispatch => ({
-  appActions: bindActionCreators(appActions, dispatch)
+const mapDispatchToProps = (dispatch) => ({
+  appActions: bindActionCreators(appActions, dispatch),
 });
 function mapStateToProps(state) {
   return {
@@ -313,7 +320,7 @@ function mapStateToProps(state) {
     app: state.app,
     loader: state.loader,
     hotspots: state.hotspots,
-    AjivarGuideEnable: state.app.AjivarGuideEnable
+    AjivarGuideEnable: state.app.AjivarGuideEnable,
   };
 }
 export default connect(
@@ -326,14 +333,14 @@ const Styles = StyleSheet.create({
   sideMenuContainer: {
     flex: 1,
     flexDirection: "column",
-    backgroundColor: Constants.Colors.White
+    backgroundColor: Constants.Colors.White,
   },
   sideMenuImageContainer: {
     marginTop: Platform.OS == "ios" ? moderateScale(20) : 0,
     paddingHorizontal: moderateScale(30),
     paddingVertical: moderateScale(10),
     justifyContent: "flex-end",
-    alignItems: "flex-start"
+    alignItems: "flex-start",
   },
   profileImg: {
     height: Constants.BaseStyle.DEVICE_WIDTH * 0.3,
@@ -344,44 +351,44 @@ const Styles = StyleSheet.create({
     backgroundColor: Constants.Colors.White,
     justifyContent: "center",
     alignItems: "center",
-    overflow: "hidden"
+    overflow: "hidden",
   },
   imgAvatar: {
     height: Constants.BaseStyle.DEVICE_WIDTH * 0.3,
-    width: Constants.BaseStyle.DEVICE_WIDTH * 0.3
+    width: Constants.BaseStyle.DEVICE_WIDTH * 0.3,
   },
   userInfo: {
-    padding: moderateScale(5)
+    padding: moderateScale(5),
   },
   userName: {
     // ...Constants.Fonts.TitilliumWebBold,
     fontSize: moderateScale(22),
-    color: Constants.Colors.Primary
+    color: Constants.Colors.Primary,
   },
   userEmail: {
     // ...Constants.Fonts.TitilliumWebRegular,
     fontSize: moderateScale(17),
-    color: Constants.Colors.gray
+    color: Constants.Colors.gray,
   },
   sideMenuSubContainer: {
     // paddingHorizontal: moderateScale(30),
     // paddingVertical: moderateScale(10),
-    backgroundColor: Constants.Colors.White
+    backgroundColor: Constants.Colors.White,
   },
   menuBtn: {
     flexDirection: "row",
     justifyContent: "flex-start",
     alignItems: "center",
-    backgroundColor: "#FFF1CD"
+    backgroundColor: "#FFF1CD",
   },
   menuButton2: {
     borderColor: Constants.Colors.fadeBorder,
     borderWidth: 1,
-    paddingVertical: 10
+    paddingVertical: 10,
   },
   menuButtonSetting: {
     borderBottomColor: Constants.Colors.fadeBorder,
-    borderLeftWidth: 1
+    borderLeftWidth: 1,
   },
   menuButton3: {
     backgroundColor: Constants.Colors.Transparent,
@@ -390,7 +397,7 @@ const Styles = StyleSheet.create({
     paddingVertical: 10,
     borderLeftWidth: 0,
     borderRightWidth: 0,
-    borderTopWidth: 0
+    borderTopWidth: 0,
   },
   menuText: {
     // ...Constants.Fonts.TitilliumWebRegular,
@@ -404,39 +411,39 @@ const Styles = StyleSheet.create({
       Constants.BaseStyle.DEVICE_HEIGHT > 800
         ? moderateScale(8)
         : moderateScale(0),
-    fontWeight: "500"
+    fontWeight: "500",
     //  textAlign : 'center',
     // fontFamily: "Cochin",
   },
   subMenuText: {
-    paddingVertical: moderateScale(3)
+    paddingVertical: moderateScale(3),
   },
   menuSubText: {
     fontSize: moderateScale(20),
-    fontWeight: "normal"
+    fontWeight: "normal",
   },
   buttonStyle: {},
   gradientStyle: { borderRadius: 0 },
   activeStatus: {
     borderColor: Constants.Colors.placehoder,
     borderWidth: 0.4,
-    paddingHorizontal: moderateScale(30)
+    paddingHorizontal: moderateScale(30),
   },
   shuttleName: {
     // ...Constants.Fonts.TitilliumWebSemiBold,
     fontSize: moderateScale(21),
-    color: Constants.Colors.Primary
+    color: Constants.Colors.Primary,
   },
   shuttleProvider: {
     // ...Constants.Fonts.TitilliumWebRegular,
     fontSize: moderateScale(17),
-    color: Constants.Colors.placehoder
+    color: Constants.Colors.placehoder,
   },
   suttleStatusBtn: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingVertical: moderateScale(15)
+    paddingVertical: moderateScale(15),
   },
   activeBtn: {
     width: moderateScale(100),
@@ -445,7 +452,7 @@ const Styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "flex-start",
     alignItems: "center",
-    borderRadius: moderateScale(3)
+    borderRadius: moderateScale(3),
   },
   checkBtn: {
     backgroundColor: Constants.Colors.White,
@@ -453,26 +460,26 @@ const Styles = StyleSheet.create({
     alignItems: "center",
     padding: moderateScale(6),
     margin: moderateScale(3),
-    borderRadius: moderateScale(3)
+    borderRadius: moderateScale(3),
   },
   activeText: {
     // ...Constants.Fonts.TitilliumWebSemiBold,
     fontSize: moderateScale(18),
     color: Constants.Colors.White,
-    marginHorizontal: moderateScale(5)
+    marginHorizontal: moderateScale(5),
   },
   sidemenuUpDownImage: {
     height: moderateScale(20),
-    width: moderateScale(20)
+    width: moderateScale(20),
   },
   disabledItem: {
-    opacity: 0.5
+    opacity: 0.5,
   },
   appVersionText: {
-    fontSize: moderateScale(14)
+    fontSize: moderateScale(14),
     // fontFamily: "Cochin",
   },
   appVersionCont: {
-    flex: 1
-  }
+    flex: 1,
+  },
 });

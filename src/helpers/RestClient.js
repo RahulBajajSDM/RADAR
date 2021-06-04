@@ -155,6 +155,50 @@ class RestClient {
     });
   }
 
+  static restInfermedicaCall(url, type, params, headers) {
+    let context = this;
+
+    console.log(url, "\n", type, "\n", params, "\n", headers);
+    return new Promise(function(fulfill, reject) {
+      context
+        .isConnected()
+        .then(() => {
+          fetch(url, {
+            method: type,
+            timeout: 1000 * 1 * 60,
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              // "Cache-Control": "no-cache",
+              ...headers,
+            },
+            body: JSON.stringify(params),
+          })
+            .then((response) => {
+              return response.text();
+            })
+            .then((responseText) => {
+              console.log("Infermedica url ", url);
+              console.log("response -------", responseText);
+              if (responseText) {
+                fulfill(JSON.parse(responseText));
+              } else {
+                fulfill(null);
+              }
+            })
+            .catch((error) => {
+              reject({
+                message: Constants.AppConstants.Error.serverError,
+              });
+            });
+        })
+        .catch((error) => {
+          reject({
+            message: Constants.AppConstants.Error.internetConnectivity,
+          });
+        });
+    });
+  }
   static getCalll(url, token = null) {
     let context = this;
     const options = {

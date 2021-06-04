@@ -1,6 +1,7 @@
 import BackgroundGeolocation from "@mauron85/react-native-background-geolocation";
 import { Alert } from "react-native";
 import LocationServicesDialogBox from "react-native-android-location-services-dialog-box";
+import GeoFencing from "react-native-geo-fencing";
 
 export const configureLocationTracker = (locationsCb) => {
   BackgroundGeolocation.configure({
@@ -257,4 +258,21 @@ export const configureBackgroundLocationTracker = async () => {
 
 export const removeLocationStateListener = () => {
   LocationServicesDialogBox.stopListener();
+};
+
+export const calculateUserinPolygon = (polygon_arr, current_location) => {
+  console.log(polygon_arr);
+  console.log(current_location);
+
+  return new Promise((resolve, reject) => {
+    GeoFencing.containsLocation(current_location, polygon_arr)
+      .then(() => {
+        console.log("point is within polygon");
+        resolve(true);
+      })
+      .catch(() => {
+        console.log("point is NOT within polygon");
+        resolve(false);
+      });
+  });
 };

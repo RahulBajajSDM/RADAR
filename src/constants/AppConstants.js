@@ -1,9 +1,9 @@
 let AppConstants = {
-  AppName: "Ajivar",
+  AppName: "RADAR",
   Notificaitons: {
     Error: 1,
     Success: 2,
-    Warning: 3
+    Warning: 3,
   },
   AppVersion: 1.5,
   Error: {
@@ -12,8 +12,8 @@ let AppConstants = {
     SignUpError: "The activation code is incorrect , please try again",
     internetConnectivity: "Please check your internet connection",
     botInterNetConnectivity:
-      "Please check you internet connection. Close the app and restart."
-  }
+      "Please check you internet connection. Close the app and restart.",
+  },
 };
 
 module.exports = AppConstants;

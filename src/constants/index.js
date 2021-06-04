@@ -7,7 +7,7 @@ import AppConstants from "./AppConstants";
 import Strings from "./Strings";
 import DevKeys from "./DevKeys";
 import Url from "./url";
-
+import Styles from "./AppStyles";
 export default {
   Colors,
   BaseStyle,
@@ -16,5 +16,6 @@ export default {
   AppConstants,
   Strings,
   DevKeys,
-  Url
+  Url,
+  Styles,
 };

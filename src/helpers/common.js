@@ -6,7 +6,7 @@ import { Alert, Platform } from "react-native";
 import Constants from "../constants";
 
 var Common = {
-  timeSince: date => {
+  timeSince: (date) => {
     if (!date) {
       date = new Date();
     } else {
@@ -48,7 +48,7 @@ var Common = {
   Dialog: (msg, buttons) => {
     if (Platform.OS !== "web") {
       Alert.alert(Constants.AppConstants.AppName, msg, buttons, {
-        cancelable: true
+        cancelable: true,
       });
     }
   },
@@ -57,11 +57,11 @@ var Common = {
       let date = new Date(obj.date);
       return date >= startDate && date <= endDate;
     });
-    let dates = filteredData.map(a => a.date);
-    let price = filteredData.map(a => parseInt(a.price));
+    let dates = filteredData.map((a) => a.date);
+    let price = filteredData.map((a) => parseInt(a.price));
     return { dates, price };
   },
-  formatedAddress: collection => {
+  formatedAddress: (collection) => {
     let street_number = "";
     let sublocality_level_1 = "";
     let sublocality_level_2 = "";
@@ -69,7 +69,7 @@ var Common = {
     let city = "";
     let country = "";
     let postal_code = "";
-    collection.forEach(address_component => {
+    collection.forEach((address_component) => {
       if (address_component.types[0] == "sublocality_level_3") {
         sublocality_level_3 = address_component.long_name;
       }
@@ -103,23 +103,29 @@ var Common = {
       sublocality_level_3,
       city,
       country,
-      postal_code
+      postal_code,
     };
   },
-  checkEmptyAddress: val => {
+  checkEmptyAddress: (val) => {
     if (val != "") {
       return val + ",";
     } else {
       return "";
     }
   },
-  roundOffValue: num => {
+  roundOffValue: (num) => {
     if (num) {
       return parseFloat(num).toFixed(2);
     } else {
       return 0;
     }
-  }
+  },
+
+  getDateDiffInYears: (date) => {
+    let currentDate = new Date().getFullYear();
+    let dobYear = new Date(date).getFullYear();
+    return currentDate - dobYear;
+  },
 };
 
 module.exports = Common;

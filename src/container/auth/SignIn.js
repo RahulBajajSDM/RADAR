@@ -29,7 +29,7 @@ import Icon from "../../components/common/Icon";
 import Regex from "../../helpers/Regex";
 import Loading from "../../components/common/Loading";
 import MyActivityIndicator from "../../components/common/MyActivityIndicator";
-
+import GeoFencing from "react-native-geo-fencing";
 class SignInCustom extends Component {
   constructor(props) {
     super(props);
@@ -43,6 +43,14 @@ class SignInCustom extends Component {
     };
     this.signUp = this.signUp.bind(this);
   }
+
+  // componentDidMount() {
+  //   console.log(polygon);
+  //   console.log(point);
+  //   GeoFencing.containsLocation(point, polygon)
+  //     .then(() => console.log("point is within polygon"))
+  //     .catch(() => console.log("point is NOT within polygon"));
+  // }
 
   showPassword = () => {
     this.setState({
@@ -108,6 +116,9 @@ class SignInCustom extends Component {
                 email: cb.email,
                 firstName: cb.firstName,
                 lastName: cb.lastName,
+                dateOfBirth: cb.DOB,
+                gender: cb.gender,
+                // dateOfJoining:cb.DOB,
                 contactNumber: cb.contactNumber,
               };
               this.props.AppAction.loginUserAsSDEI(

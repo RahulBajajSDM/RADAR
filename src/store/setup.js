@@ -93,7 +93,7 @@ function onRegister(token) {
 }
 
 function onNotification(remoteMessage) {
-  console.log("[App] onNotificationremoteMessage: ", remoteMessage);
+  // console.log("[App] onNotificationremoteMessage: ", remoteMessage);
   let notify = remoteMessage.notification;
   console.log("[App] onNotification: ", notify);
   const options = {
@@ -112,7 +112,7 @@ function onNotification(remoteMessage) {
 }
 
 function onOpenNotification(remoteMessage, state) {
-  console.log("[App] onOpenNotification: ", remoteMessage);
+  // console.log("[App] onOpenNotification: ", remoteMessage);
   let { selectedScreen, screenName } = storeObj.store.getState().app;
   let message = remoteMessage.data.message;
   let jsonMessage = message && JSON.parse(message);

@@ -16,7 +16,8 @@ const initialState = {
   myActivityLoader: false,
   posimationLoader: false,
   posimationDelLoader: false,
-  addQuestionnaire: false
+  addQuestionnaire: false,
+  infermedicaLoader: false,
 };
 
 const user = (state = initialState, action) => {
@@ -24,121 +25,126 @@ const user = (state = initialState, action) => {
     case Types.LOGIN_REQUEST:
       return {
         ...state,
-        loginLoader: true
+        loginLoader: true,
       };
     case Types.LOGIN:
       return {
         ...state,
-        loginLoader: false
+        loginLoader: false,
       };
     case Types.LOGIN_REQUEST_FAIL:
       return {
         ...state,
-        loginLoader: false
+        loginLoader: false,
       };
     case Types.REGISTER_REQUEST:
       return {
         ...state,
-        signupLoader: true
+        signupLoader: true,
       };
     case Types.REGISTER_REQUEST_SUCCESS:
       return {
         ...state,
-        signupLoader: false
+        signupLoader: false,
       };
     case Types.REGISTER_REQUEST_FAIL:
       return {
         ...state,
-        signupLoader: false
+        signupLoader: false,
       };
     case Types.GET_CODE_INFO_REQUEST:
       return {
         ...state,
-        getCodeInfoLoader: true
+        getCodeInfoLoader: true,
       };
     case Types.GET_CODE_INFO:
       return {
         ...state,
-        getCodeInfoLoader: false
+        getCodeInfoLoader: false,
       };
     case Types.GET_CODE_INFO_REQUEST_FAIL:
       return {
         ...state,
-        getCodeInfoLoader: false
+        getCodeInfoLoader: false,
       };
     case Types.GET_HOTSPOTS_REQUEST:
       return {
         ...state,
-        getHotspotsLoader: true
+        getHotspotsLoader: true,
       };
     case Types.GET_HOTSPOTS_SUCCESS:
       return {
         ...state,
-        getHotspotsLoader: false
+        getHotspotsLoader: false,
       };
     case Types.GET_HOTSPOTS_FAILED:
       return {
         ...state,
-        getHotspotsLoader: false
+        getHotspotsLoader: false,
       };
     case Types.ADD_QUESTIONS_REQUEST:
       return {
         ...state,
-        addQuestionnaire: true
+        addQuestionnaire: true,
       };
     case Types.ADD_QUESTIONS_SUCCESS:
       return {
         ...state,
-        addQuestionnaire: false
+        addQuestionnaire: false,
       };
     case Types.ADD_QUESTIONS_FAILED:
       return {
         ...state,
-        addQuestionnaire: false
+        addQuestionnaire: false,
       };
     case Types.CHANGE_PASSWORD_REQUEST:
       return {
         ...state,
-        changePasswordLoader: true
+        changePasswordLoader: true,
       };
     case Types.CHANGE_PASSWORD_SUCCESS:
       return {
         ...state,
-        changePasswordLoader: false
+        changePasswordLoader: false,
       };
     case Types.CHANGE_PASSWORD_FAIL:
       return {
         ...state,
-        changePasswordLoader: false
+        changePasswordLoader: false,
       };
     case Types.MY_ACTIVITIES_REQUEST:
       return {
         ...state,
-        myActivityLoader: true
+        myActivityLoader: true,
       };
     case Types.MY_ACTIVITIES_SUCCESS:
       return {
         ...state,
-        myActivityLoader: false
+        myActivityLoader: false,
       };
     case Types.MY_ACTIVITIES_FAILED:
       return {
         ...state,
-        myActivityLoader: false
+        myActivityLoader: false,
       };
     case Types.LOGOUT_REQUEST:
       return {
         ...state,
-        loginLoader: true
+        loginLoader: true,
       };
     case Types.LOGOUT:
       return {
         ...state,
-        loginLoader: false
+        loginLoader: false,
       };
 
     case "RESET":
       return { initialState };
+
+    case Types.INFERMEDICA_LOADER_OFF:
+      return { ...state, infermedicaLoader: false };
+    case Types.INFERMEDICA_LOADER_ON:
+      return { ...state, infermedicaLoader: true };
     default:
       return state;
   }

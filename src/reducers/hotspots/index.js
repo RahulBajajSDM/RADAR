@@ -2,7 +2,7 @@ import * as Types from "../../actionTypes";
 const initialState = {
   loading: false,
   hotspotsArr: [],
-  hotspot: {}
+  hotspot: {},
 };
 
 const hotspots = (state = initialState, action) => {
@@ -10,21 +10,23 @@ const hotspots = (state = initialState, action) => {
     case Types.GET_HOTSPOTS_REQUEST:
       return {
         ...state,
-        loading: true
+        loading: true,
       };
     case Types.GET_HOTSPOTS_SUCCESS:
       return {
         ...state,
         hotspotsArr: action.payload,
-        loading: false
+        loading: false,
       };
     case Types.GET_HOTSPOTS_FAILED:
       return {
         ...state,
-        loading: false
+        loading: false,
       };
     case Types.UPDATE_HOTSPOT_SUCCESS:
       console.log("hotspotArrayValue", state.hotspotsArr, action);
+      // eslint-disable-next-line no-case-declarations
+      let { hotspot } = state;
       if (hotspot._id === action.payload._id) {
         return { ...hotspot };
       }
@@ -34,6 +36,7 @@ const hotspots = (state = initialState, action) => {
     //   };
     //   return hotspot;
     // });
+    // eslint-disable-next-line no-fallthrough
     case "RESET":
       return { ...initialState };
     default:

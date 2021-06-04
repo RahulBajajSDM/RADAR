@@ -48,18 +48,19 @@ import { goHome } from "../config/navigation";
 
 import background from "../assets/iOS/App_Background.png";
 import Constants from "../constants";
+import CovidAssesment from "../container/dashboard/CovidAssesment";
 
 /* eslint-disable */
 /**
  * HOC for wrapping toast and loader
  */
 
-const WrapScreen = (ReduxScreen, store, headerProps) => props => (
+const WrapScreen = (ReduxScreen, store, headerProps) => (props) => (
   <Provider store={store}>
     <SafeAreaView
       style={{
         flex: 1,
-        backgroundColor: Constants.Colors.AuthYellow
+        backgroundColor: Constants.Colors.AuthYellow,
       }}
     >
       <View
@@ -68,7 +69,7 @@ const WrapScreen = (ReduxScreen, store, headerProps) => props => (
           position: "absolute",
           top: 44,
           height: "100%",
-          width: "100%"
+          width: "100%",
         }}
       >
         {/* <Image source={background} style={{ height: "100%", width: "100%" }} /> */}
@@ -94,9 +95,9 @@ const WrapScreen = (ReduxScreen, store, headerProps) => props => (
               Navigation.mergeOptions(props.componentId, {
                 sideMenu: {
                   right: {
-                    visible: true
-                  }
-                }
+                    visible: true,
+                  },
+                },
               })
             }
           />
@@ -124,7 +125,7 @@ const WrapScreen = (ReduxScreen, store, headerProps) => props => (
             auth={headerProps.auth}
             selected={headerProps.selected}
             componentId={props.componentId}
-            onTabPress={switchToWhich => {
+            onTabPress={(switchToWhich) => {
               store.dispatch(tabSelect(props.componentId, switchToWhich));
 
               // Navigation.mergeOptions(props.componentId, {
@@ -142,7 +143,7 @@ const WrapScreen = (ReduxScreen, store, headerProps) => props => (
 
 /* eslint-enable */
 
-export const registerScreens = store => {
+export const registerScreens = (store) => {
   Navigation.registerComponent(
     "AppIntro",
     () => WrapScreen(AppIntro, store, { disableHeader: true }),
@@ -163,7 +164,7 @@ export const registerScreens = store => {
         auth: true,
         hideDrawer: true,
         hideBack: true,
-        title: "Welcome"
+        title: "Welcome",
       }),
     () => SignIn
   );
@@ -175,7 +176,7 @@ export const registerScreens = store => {
         auth: true,
         hideDrawer: true,
         hideBack: true,
-        title: "Sign Up"
+        title: "Sign Up",
       }),
     () => SignUp
   );
@@ -186,7 +187,7 @@ export const registerScreens = store => {
         disableHeader: false,
         auth: true,
         hideDrawer: true,
-        title: "Forgot Password"
+        title: "Forgot Password",
       }),
     () => ForgotPassword
   );
@@ -197,7 +198,7 @@ export const registerScreens = store => {
         disableHeader: false,
         auth: true,
         hideDrawer: true,
-        title: "Enter OtpScreen"
+        title: "Enter OtpScreen",
       }),
     () => EnterOtpScreen
   );
@@ -209,7 +210,7 @@ export const registerScreens = store => {
         disableHeader: false,
         auth: true,
         hideDrawer: true,
-        title: "Change Password"
+        title: "Change Password",
       }),
     () => ChangePassword
   );
@@ -220,7 +221,7 @@ export const registerScreens = store => {
         disableHeader: false,
         auth: true,
         hideDrawer: true,
-        title: "Confirm Password"
+        title: "Confirm Password",
       }),
     () => ConfirmPassword
   );
@@ -232,7 +233,7 @@ export const registerScreens = store => {
         disableHeader: false,
         auth: true,
         hideDrawer: true,
-        title: "Edit Profile"
+        title: "Edit Profile",
       }),
     () => EditProfile
   );
@@ -244,7 +245,7 @@ export const registerScreens = store => {
         disableHeader: false,
         auth: false,
         hideDrawer: true,
-        title: "Questionnaire"
+        title: "Questionnaire",
       }),
     () => Questionnaire
   );
@@ -273,7 +274,7 @@ export const registerScreens = store => {
       WrapScreen(Tab1, store, {
         title: "Home",
         enableTabs: true,
-        selected: 0
+        selected: 0,
       }),
     () => Tab1
   );
@@ -283,7 +284,7 @@ export const registerScreens = store => {
       WrapScreen(Tab2, store, {
         title: "Posimations",
         enableTabs: true,
-        selected: 1
+        selected: 1,
       }),
     () => Tab2
   );
@@ -295,7 +296,7 @@ export const registerScreens = store => {
 
         title: "Home",
         enableTabs: false,
-        selected: 2
+        selected: 2,
       }),
     () => Tab3
   );
@@ -305,7 +306,7 @@ export const registerScreens = store => {
       WrapScreen(Tab4, store, {
         title: "Tab1",
         enableTabs: true,
-        selected: 3
+        selected: 3,
       }),
     () => Tab4
   );
@@ -326,7 +327,7 @@ export const registerScreens = store => {
       WrapScreen(Tab5, store, {
         title: "Tab5",
         enableTabs: true,
-        selected: 4
+        selected: 4,
       }),
     () => Tab5
   );
@@ -336,7 +337,7 @@ export const registerScreens = store => {
       WrapScreen(Screen1, store, {
         title: "Screen1",
         hideDrawer: true,
-        hideBack: false
+        hideBack: false,
       }),
     () => Screen1
   );
@@ -346,7 +347,7 @@ export const registerScreens = store => {
       WrapScreen(MyActivity, store, {
         title: "My Activity",
         hideDrawer: true,
-        hideBack: false
+        hideBack: false,
       }),
     () => MyActivity
   );
@@ -357,7 +358,18 @@ export const registerScreens = store => {
       WrapScreen(AlertActivity, store, {
         title: "Alert Activity",
         hideDrawer: true,
-        hideBack: false
+        hideBack: false,
+      }),
+    () => AlertActivity
+  );
+
+  Navigation.registerComponent(
+    "CovidAssesment",
+    () =>
+      WrapScreen(CovidAssesment, store, {
+        title: "CovidAssesment",
+        hideDrawer: true,
+        hideBack: false,
       }),
     () => AlertActivity
   );
@@ -368,7 +380,7 @@ export const registerScreens = store => {
       WrapScreen(WebView, store, {
         title: "WebView",
         hideDrawer: true,
-        hideBack: false
+        hideBack: false,
       }),
     () => WebView
   );

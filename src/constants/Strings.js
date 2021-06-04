@@ -9,7 +9,7 @@ let Strings = {
   Ooz: {
     OozChallengePick: "Pick a challenge for today, ",
     OozChallengeRatingText: "Please rate yourself",
-    popUpOozChallenge: "Today's Ooz Challenges"
+    popUpOozChallenge: "Today's Ooz Challenges",
   },
   Common: {
     EmptyEmailMsg: "Please enter an email address.",
@@ -18,15 +18,15 @@ let Strings = {
     EnterAccessCode: "Please enter a access code.",
     MinPersonRide: "Please enter number of persons to continue ride.",
     MaxPersonRide: "Minimum 1 and maximum 20 person can travelle in a ride",
-    VaildDigit: "No of persons must be between 1-20"
+    VaildDigit: "No of persons must be between 1-20",
   },
   Error: {
     SourceNotSelected:
-      "Pickup location is not specified please select pickup point first"
+      "Pickup location is not specified please select pickup point first",
   },
   PlaceHolder: {
     Pickup: "Enter pick-up location",
-    Destination: "Where to?"
+    Destination: "Where to?",
   },
   Login: {
     Heading: "Welcome",
@@ -36,13 +36,13 @@ let Strings = {
     ForgotPassword: "Forgot Password?",
     NewUser: "New User?",
     Signup: " Sign Up",
-    EnterAccessCode: "Enter Access Code"
+    EnterAccessCode: "Enter Access Code",
   },
   Signup: {},
   ForgotPassword: {},
   RideInfo: {
     Now: "Now",
-    BookRide: "Book Ride"
+    BookRide: "Book Ride",
   },
   RideRequest: {
     RequestSubmitted: "Request Submitted",
@@ -50,7 +50,7 @@ let Strings = {
     Notificaion: "request you will get the notification.",
     Ok: "Ok",
     RideCompleted1: "Your Ride has been successfully",
-    RideCompleted2: "Completed"
+    RideCompleted2: "Completed",
   },
   RideWait: {
     Now: "Now",
@@ -58,14 +58,14 @@ let Strings = {
     ChatWithAdmin: "Chat with admin",
     WaitingTime: "Waiting Time",
     GoToHome: "Go to Home",
-    NoShuttleAvailable: "No Shuttle is available"
+    NoShuttleAvailable: "No Shuttle is available",
   },
   CancelRide: {
     AreYouSureYouWantTo: "Are you sure you want to",
     CancelTheRide: "cancel the ride?",
     No: "No",
     Yes: "Yes",
-    Logout: "Logout from CIDR?"
+    Logout: "Logout from CIDR?",
   },
   Permissions: {
     Locations:
@@ -79,56 +79,56 @@ let Strings = {
     Gallery:
       "Gallery access permission is denied for " +
       AppCosntants.AppName +
-      ",Please enable it from the settings"
+      ",Please enable it from the settings",
   },
   RideAccepted: {
-    ArivalTime: "Arival Time"
+    ArivalTime: "Arival Time",
   },
   signIn: {
-    subHeading: "Sign into your account"
+    subHeading: "Sign into your account",
   },
 
   signUp: {
-    signUpButton: "New User? - Sign up now"
+    signUpButton: "New User? - Sign up now",
   },
 
   Institution: {
-    InstitutionCode: "Enter Organization Code"
+    InstitutionCode: "Enter Organization Code",
   },
 
   IntroScreen: {
     signUp: "Sign Up",
-    signIn: "Sign Up"
+    signIn: "Sign Up",
   },
   IntroScreen1: {
     HeaderText: "Welcome to Ajivar",
     SubHeadingText1: "A guided journey to a peaceful life",
     SubHeadingText2: "using an AI-Powered Life Coach",
     SignInbuttonFirstName: "Already have an account?",
-    SignInbuttonSignInName: "Sign In"
+    SignInbuttonSignInName: "Sign In",
   },
   IntroScreen2: {
     HeaderText: "Personalized",
     SubHeadingText1: "Individualized suggestions and ",
-    SubHeadingText2: "recommendations based on Mindfulness"
+    SubHeadingText2: "recommendations based on Mindfulness",
   },
   IntroScreen3: {
     HeaderText: "Grow",
     SubHeadingText1: "Learn and practice techniques that",
     SubHeadingText2: "help keep you focused and relaxed",
-    ImageName: "Self-awareness"
+    ImageName: "Self-awareness",
   },
   IntroScreen4: {
     HeaderText: "Courage to Change",
     SubHeadingText1: "Challenge yourself and improve your",
     SubHeadingText2: "self-esteem with Ooz Challenges",
-    ImageName: "Resiliency"
+    ImageName: "Resiliency",
   },
   IntroScreen5: {
     HeaderText: "Text1",
     SubHeadingText1: "lepsum data",
     SubHeadingText2: "lepsum Data",
-    ImageName: "lepsum Data"
+    ImageName: "lepsum Data",
   },
   SideMenu: {
     VersionCode: "VersionCode : ",
@@ -141,38 +141,47 @@ let Strings = {
     Settings: {
       AlertActivity: "Alert Activity",
       EditMyProfile: "Edit my profile",
+      COVIDAssesment: "COVID-19 Assesment",
       ChangeMyPassword: "Change My Password",
-      Logout: "Log out"
+      Logout: "Log out",
     },
     Faq: "FAQ",
     privacyPolicy: "Privacy Policy",
-    TermsofService: "Terms of Service"
+    TermsofService: "Terms of Service",
   },
   Activation: "Activation",
   EmailVerification: {
     ConfimationCode: "Confirmation code was sent to registered email",
-    ResendCode: "You will be able to resend Code in 120 sec"
+    ResendCode: "You will be able to resend Code in 120 sec",
   },
   Profile: {
     MyCurrent: "My Current",
     ChangeAJ: "Change my AJ Guide",
     Select: "Select this guide",
-    Current: "Current"
+    Current: "Current",
   },
   Journal: {
     NewNote: "New Note",
     Save: "Save",
     titleErrorMessage: "Please add the title",
-    entryErrorMessage: "Please add the entry"
+    entryErrorMessage: "Please add the entry",
   },
   Bot: {
     AcceptGuide: "Accept this Guide",
     ChangeAnyTime: "You can change your guide at any time in your resources",
-    OozChallenge: "Here is the Ooz Challenge for you"
+    OozChallenge: "Here is the Ooz Challenge for you",
   },
   Dashboard: {
-    MyActivity: "My Activity"
-  }
+    MyActivity: "My Activity",
+  },
+  DisclaimerText: {
+    conditions: [
+      "✓ This tool does not provide medical advice, it is intended for informational purposes only. ",
+      "✓ It is not a substitute for professional medical advice or treatment.",
+      "✓ Also, for your reference you can use the following links(our source of information) when it comes to COVID-19 Risk Assessment.",
+    ],
+    linkUrl: ["https://www.who.int/", "http://cdc.gov/"],
+  },
 };
 
 module.exports = Strings;

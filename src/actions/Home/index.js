@@ -134,14 +134,16 @@ export const createEmployeesActivitiesApi = (param, componentId, fn) => {
     let {
       user: { userData },
     } = getState();
-    dispatch({ type: types.EMPLOYEES_ACTIVITIES_REQUEST, isLoading: true });
+
+    console.log("param of reduce is ", param);
+    // dispatch({ type: types.EMPLOYEES_ACTIVITIES_REQUEST, isLoading: true });
     RestClient.restCall(
       Connection.getResturl() + "employeeActivities/create",
       param,
       userData.myToken
     )
       .then((res) => {
-        console.log("Response", res);
+        console.log("Response of reducer is ", res);
         if (res.status === 401) {
           goToAuth("SignIn");
           dispatch({
@@ -166,11 +168,11 @@ export const createEmployeesActivitiesApi = (param, componentId, fn) => {
             isLoading: false,
           });
         } else {
-          dispatch({
-            type: types.EMPLOYEES_ACTIVITIES_SUCCESS,
-            payload: res.data,
-            isLoading: false,
-          });
+          // dispatch({
+          //   type: types.EMPLOYEES_ACTIVITIES_SUCCESS,
+          //   payload: res.data,
+          //   isLoading: false,
+          // });
           fn(res.data);
         }
       }) // eslint-disable-next-line
@@ -678,6 +680,117 @@ export const getAlertActivities = (param, componentId, fn) => {
   };
 };
 
+/**
+ * new Api for get user status from rogya Setu
+ * @param {*} param
+ * @param {*} componentId
+ * @param {*} aarogyaSetuToken
+ * @param {*} cb
+ */
+
+export const getArogyaUserStatus = (param, componentId, cb) => {
+  return (dispatch, getState) => {
+    let {
+      user: { userData },
+    } = getState();
+    console.log("api url ", Connection.getResturl() + "sendRequestToArogya");
+    console.log("param", param);
+    dispatch({ type: types.AAROGYA_USERSTATUS_REQUEST, isLoading: true });
+    RestClient.restCall(
+      Connection.getResturl() + "sendRequestToArogya",
+      param,
+      userData.myToken
+    )
+      .then((res) => {
+        console.log("Response of user Status from Api", res);
+        if (
+          res.data.error &&
+          res.data.error.error_message &&
+          res.data.error.error_message !== ""
+        ) {
+          console.log("ShowMessageeee");
+          setTimeout(() => {
+            ShowToast({
+              background: Constants.Colors.PastelBlue,
+              message: res.data.error.error_message,
+            });
+          }, 1000);
+          dispatch({ type: types.AAROGYA_USERSTATUS_FAIL, isLoading: false });
+        } else if (res.status === 401) {
+          goToAuth("SignIn");
+          dispatch({
+            type: types.LOGOUT,
+          });
+          dispatch({
+            type: "RESET",
+          });
+          setTimeout(() => {
+            ShowToast({
+              background: Constants.Colors.PastelBlue,
+              message: res.message,
+            });
+          }, 100);
+        } else if (res.status == 200) {
+          dispatch({
+            type: types.AAROGYA_USERSTATUS_SUCCESS,
+            payload: res,
+            isLoading: false,
+          });
+        }
+        cb(res);
+      }) // eslint-disable-next-line
+      .catch((e) => {
+        // eslint-disable-line
+        console.log("error error error********", e);
+        dispatch({ type: types.AAROGYA_USERSTATUS_FAIL, isLoading: false });
+        dispatch(handleLoader(false));
+        ShowToast({
+          background: Constants.Colors.PastelBlue,
+          message: "Something went wrong",
+        });
+      });
+  };
+};
+
+/**
+ *
+ * @param {*} param
+ * @param {*} componentId
+ * @param {*} aarogyaSetuToken
+ * @param {*} cb
+ */
+export const getArogyaUserStatusByRequestId = (param, cb) => {
+  return (dispatch, getState) => {
+    dispatch({ type: types.AAROGYA_USERSTATUSBYID_REQUEST, isLoading: true });
+    console.log(
+      "Api url",
+      Connection.getResturl() + "requestIdGetData/" + param
+    );
+    RestClient.getCall(
+      // Connection.getAarogyaBaseUrl() + "userstatusbyreqid",
+      Connection.getResturl() + "requestIdGetData/" + param
+    )
+      .then((res) => {
+        console.log("Response of user Status from Api 2 ", res);
+        dispatch({
+          type: types.AAROGYA_USERSTATUSBYID_SUCCESS,
+          payload: res,
+          isLoading: false,
+        });
+        cb(res);
+      }) // eslint-dis
+      .catch((e) => {
+        // eslint-disable-line
+        console.log("error error error********", e);
+        dispatch({ type: types.AAROGYA_USERSTATUSBYID_FAIL, isLoading: false });
+        dispatch(handleLoader(false));
+        ShowToast({
+          background: Constants.Colors.PastelBlue,
+          message: "Something went wrong",
+        });
+      });
+  };
+};
 export const getAarogyaUserStatus = (
   param,
   componentId,
@@ -801,12 +914,13 @@ export const getAarogyaUserStatusByRequestId = (
   return (dispatch, getState) => {
     dispatch({ type: types.AAROGYA_USERSTATUSBYID_REQUEST, isLoading: true });
     RestClient.restAarogyaSetuCall(
-      Connection.getAarogyaBaseUrl() + "userstatusbyreqid",
+      // Connection.getAarogyaBaseUrl() + "userstatusbyreqid",
+      Connection.getAarogyaBaseUrl() + "statusRequestByRequestId",
       param,
       aarogyaSetuToken
     )
       .then((res) => {
-        console.log("Response2211", res);
+        console.log("Response2211 of new Api ", res);
         dispatch({
           type: types.AAROGYA_USERSTATUSBYID_SUCCESS,
           payload: res,
