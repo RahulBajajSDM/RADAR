@@ -56,6 +56,8 @@ target 'Radar' do
   
   pod 'RNBluetoothStateManager', :path => '../node_modules/react-native-bluetooth-state-manager'
 
+  pod 'react-native-geo-fencing', path: '../node_modules/react-native-geo-fencing'
+  
   pre_install do |installer|
     puts("Image fix for ios14: remove this when upgradeing to >= 0.63.3")
     find = "_currentFrame.CGImage;"

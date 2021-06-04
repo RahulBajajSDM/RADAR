@@ -64,6 +64,11 @@ PODS:
   - glog (0.3.5)
   - GoogleDataTransport (7.5.1):
     - nanopb (~> 1.30906.0)
+  - GoogleMaps (5.0.0):
+    - GoogleMaps/Maps (= 5.0.0)
+  - GoogleMaps/Base (5.0.0)
+  - GoogleMaps/Maps (5.0.0):
+    - GoogleMaps/Base
   - GoogleUtilities/AppDelegateSwizzler (6.7.2):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
@@ -251,6 +256,9 @@ PODS:
     - React-cxxreact (= 0.61.5)
     - React-jsi (= 0.61.5)
   - React-jsinspector (0.61.5)
+  - react-native-geo-fencing (0.1.0):
+    - GoogleMaps
+    - React
   - react-native-netinfo (5.9.7):
     - React-Core
   - react-native-splash-screen (3.2.0):
@@ -339,6 +347,7 @@ DEPENDENCIES:
   - React-jsi (from `../node_modules/react-native/ReactCommon/jsi`)
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
+  - react-native-geo-fencing (from `../node_modules/react-native-geo-fencing`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
   - react-native-text-input-mask (from `../node_modules/react-native-text-input-mask`)
@@ -377,6 +386,7 @@ SPEC REPOS:
     - FirebaseInstanceID
     - FirebaseMessaging
     - GoogleDataTransport
+    - GoogleMaps
     - GoogleUtilities
     - nanopb
     - PromisesObjC
@@ -413,6 +423,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsiexecutor"
   React-jsinspector:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
+  react-native-geo-fencing:
+    :path: "../node_modules/react-native-geo-fencing"
   react-native-netinfo:
     :path: "../node_modules/@react-native-community/netinfo"
   react-native-splash-screen:
@@ -480,6 +492,7 @@ SPEC CHECKSUMS:
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
   GoogleDataTransport: f56af7caa4ed338dc8e138a5d7c5973e66440833
+  GoogleMaps: 600e5e69bdf7f4ed7cac4d6aa96c7ec08a5aa254
   GoogleUtilities: 7f2f5a07f888cdb145101d6042bc4422f57e70b3
   nanopb: 59317e09cf1f1a0af72f12af412d54edf52603fc
   PromisesObjC: 8c196f5a328c2cba3e74624585467a557dcb482f
@@ -493,6 +506,7 @@ SPEC CHECKSUMS:
   React-jsi: cb2cd74d7ccf4cffb071a46833613edc79cdf8f7
   React-jsiexecutor: d5525f9ed5f782fdbacb64b9b01a43a9323d2386
   React-jsinspector: fa0ecc501688c3c4c34f28834a76302233e29dc0
+  react-native-geo-fencing: c0bc70082b0eeec332d8cda130f26e217fd8da55
   react-native-netinfo: 250dc0ca126512f618a8a2ca6a936577e1f66586
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
   react-native-text-input-mask: 07227297075f9653315f43b0424d596423a01736
@@ -519,6 +533,6 @@ SPEC CHECKSUMS:
   RNVectorIcons: bc69e6a278b14842063605de32bec61f0b251a59
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
-PODFILE CHECKSUM: d7b97e551427f92885cd9c9dc844dcde1f2109b0
+PODFILE CHECKSUM: 2983c52ecdbf6466e7acb8abc63252c0a536f18d
 
 COCOAPODS: 1.10.1
