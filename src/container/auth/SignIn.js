@@ -34,6 +34,8 @@ class SignInCustom extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      // email: "rahulbajaj@smartdatainc.net",
+      // password: "rahul",
       email: "",
       password: "",
       hidePassword: true,
@@ -118,7 +120,7 @@ class SignInCustom extends Component {
                 lastName: cb.lastName,
                 dateOfBirth: cb.DOB,
                 gender: cb.gender,
-                // dateOfJoining:cb.DOB,
+                dateOfJoining: cb.DOJ,
                 contactNumber: cb.contactNumber,
               };
               this.props.AppAction.loginUserAsSDEI(

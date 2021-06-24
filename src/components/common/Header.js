@@ -8,7 +8,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import PropsTypes from "prop-types";
 import constants from "../../constants";
 
-const Header = props => {
+const Header = (props) => {
   let {
     hideBack,
     hideDrawer,
@@ -25,7 +25,7 @@ const Header = props => {
     searchText,
     searchPlaceHolder,
     onDrawerPress,
-    centerImage
+    centerImage,
     // auth
   } = props;
 
@@ -37,15 +37,15 @@ const Header = props => {
           Styles.container,
           {
             backgroundColor: color,
-            flexDirection: hideDrawer ? "row" : "row-reverse"
-          }
+            flexDirection: hideDrawer ? "row" : "row-reverse",
+          },
         ]}
       >
         {!hideDrawer ? (
           <TouchableOpacity
             style={[
               Styles.iconBtn,
-              { alignItems: "flex-end", marginRight: -80 }
+              { alignItems: "flex-end", marginRight: -80 },
             ]}
             onPress={onDrawerPress}
           >
@@ -70,13 +70,13 @@ const Header = props => {
             Styles.header,
             {
               justifyContent: searchBox ? "flex-start" : "center",
-              alignItems: searchBox ? "flex-start" : "center"
-            }
+              alignItems: searchBox ? "flex-start" : "center",
+            },
           ]}
         >
           {searchBox ? (
             <FormTextInput
-              onChangeText={text => onChangeSearchText(text)}
+              onChangeText={(text) => onChangeSearchText(text)}
               value={searchText}
               placeHolderText={searchPlaceHolder}
               style={Styles.searchBox}
@@ -100,7 +100,7 @@ const Header = props => {
                   ? { marginRight: -80 }
                   : !hideDrawer && !hideBack
                   ? { marginRight: 30 }
-                  : { marginRight: 0 }
+                  : { marginRight: 0 },
               ]}
             >
               {title}
@@ -136,7 +136,7 @@ const Styles = StyleSheet.create({
   container: {
     paddingVertical: moderateScale(5),
     backgroundColor: "#FFFFFF",
-    justifyContent: "center"
+    justifyContent: "center",
     // shadowOffset: { width: 2, height: 2 },
     // shadowColor: "black",
     // shadowOpacity: 0.5,
@@ -151,28 +151,28 @@ const Styles = StyleSheet.create({
     shadowOpacity: 0.1,
     // shadowRadius: 2,
     backgroundColor: "#FFFFFF",
-    elevation: 3
+    elevation: 3,
     // borderWidth:1
   },
   iconBtn: {
     height: moderateScale(40),
     width: moderateScale(40),
     justifyContent: "center",
-    alignItems: "flex-start"
+    alignItems: "flex-start",
   },
   header: {
     justifyContent: "center",
     alignItems: "center",
     fontWeight: "bold",
     height: moderateScale(40),
-    width: Constants.BaseStyle.DEVICE_WIDTH - moderateScale(135)
+    width: Constants.BaseStyle.DEVICE_WIDTH - moderateScale(135),
   },
   headerText: {
     // ...Constants.Fonts.TitilliumWebSemiBold,
     color: Constants.Colors.Black,
     fontSize: moderateScale(28),
     textAlign: "center",
-    textAlignVertical: "center"
+    textAlignVertical: "center",
   },
   searchBox: {
     borderColor: Constants.Colors.transparent,
@@ -183,22 +183,22 @@ const Styles = StyleSheet.create({
     alignItems: "center",
     height: moderateScale(40),
     flexDirection: "row",
-    width: Constants.BaseStyle.DEVICE_WIDTH / 1.4
+    width: Constants.BaseStyle.DEVICE_WIDTH / 1.4,
   },
   inputStyle: {
     color: Constants.Colors.Primary,
     flex: 1,
     paddingHorizontal: moderateScale(5),
     // ...Constants.Fonts.TitilliumWebRegular,
-    fontSize: moderateScale(17)
+    fontSize: moderateScale(17),
   },
   skip: {
     color: Constants.Colors.gray,
     paddingHorizontal: moderateScale(5),
     // ...Constants.Fonts.TitilliumWebRegular,
     fontSize: moderateScale(16),
-    textAlign: "right"
-  }
+    textAlign: "right",
+  },
 });
 
 /*

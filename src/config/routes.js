@@ -63,7 +63,7 @@ const WrapScreen = (ReduxScreen, store, headerProps) => (props) => (
         backgroundColor: Constants.Colors.AuthYellow,
       }}
     >
-      <View
+      {/* <View
         style={{
           flex: 1,
           position: "absolute",
@@ -72,8 +72,8 @@ const WrapScreen = (ReduxScreen, store, headerProps) => (props) => (
           width: "100%",
         }}
       >
-        {/* <Image source={background} style={{ height: "100%", width: "100%" }} /> */}
-      </View>
+        <Image source={background} style={{ height: "100%", width: "100%" }} />
+      </View> */}
       <View style={{ flex: 1, zIndex: 99 }}>
         {!headerProps.disableHeader ? (
           <Header
@@ -371,16 +371,17 @@ export const registerScreens = (store) => {
         hideDrawer: true,
         hideBack: false,
       }),
-    () => AlertActivity
+    () => CovidAssesment
   );
 
   Navigation.registerComponent(
     "WebView",
     () =>
       WrapScreen(WebView, store, {
-        title: "WebView",
+        title: "",
         hideDrawer: true,
         hideBack: false,
+        disableHeader: true,
       }),
     () => WebView
   );

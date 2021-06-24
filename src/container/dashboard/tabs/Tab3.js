@@ -113,16 +113,16 @@ class Tab3 extends React.Component {
     }
   };
   async componentDidMount() {
-    let {
-      user: { userData },
-      hotspots: { hotspotsArr },
-    } = this.props;
-    let param = { agencyId: userData.agencyId._id };
-    let newDateTimestamp = new Date().getTime();
-    let lastActiveParams = {
-      _id: userData.id,
-      lastActive: newDateTimestamp,
-    };
+    // let {
+    //   user: { userData },
+    //   hotspots: { hotspotsArr },
+    // } = this.props;
+    // let param = { agencyId: userData.agencyId._id };
+    // let newDateTimestamp = new Date().getTime();
+    // let lastActiveParams = {
+    //   _id: userData.id,
+    //   lastActive: newDateTimestamp,
+    // };
 
     // console.log("cdm called", renderCall);
 
@@ -143,6 +143,9 @@ class Tab3 extends React.Component {
     }, 5000);
   }
   async performApiCall() {
+    console.log(
+      "PerformApi Call called ******************************************"
+    );
     let {
       user: { userData },
       hotspots: { hotspotsArr },
@@ -276,7 +279,7 @@ class Tab3 extends React.Component {
         console.log("Location permission denied");
         // this.enableLocations();
         this.handleBlueTooth_LocationStatus("location");
-        this.performApiCall();
+        // this.performApiCall();
       }
     } catch (err) {
       console.warn(err);
@@ -371,6 +374,7 @@ class Tab3 extends React.Component {
   }
 
   async getHotspotsApi() {
+    console.log("HOTSPOT method called -------------------------");
     let {
       user: { userData },
       hotspots: { hotspotsArr },
@@ -799,72 +803,115 @@ class Tab3 extends React.Component {
         </View>
         {/* {this.renderModal()} */}
 
-        {/* <View style={styles.myActivityContainer}>
-          <TouchableOpacity style={styles.myActivityButton}
+        <View style={styles.myActivityContainer}>
+          <TouchableOpacity
+            style={styles.myActivityButton}
             onPress={() =>
               this.props.pushToParticularScreen(
                 this.props.componentId,
-                "MyActivity",
-              )}>
-            <Text style={{ fontSize: 14, fontWeight: "bold" }}>{constants.Strings.Dashboard.MyActivity}</Text>
+                "MyActivity"
+              )
+            }
+          >
+            <Text style={{ fontSize: 14, fontWeight: "bold" }}>
+              {constants.Strings.Dashboard.MyActivity}
+            </Text>
           </TouchableOpacity>
         </View>
         <View style={styles.topContainer}>
-          <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+          <View
+            style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+          >
             <Text style={{ fontSize: 20, textAlign: "center" }}>
-              {locations && locations.length > 0 ? "Current Coordinates \n " + locations[0].latitude + " \n" + locations[0].longitude : ""}
+              {locations && locations.length > 0
+                ? "Current Coordinates \n " +
+                  locations[0].latitude +
+                  " \n" +
+                  locations[0].longitude
+                : ""}
             </Text>
           </View>
         </View>
         <FlatList
           showsHorizontalScrollIndicator={false}
           data={hotspots}
-          keyExtractor={(item, index) => '' + index}
+          keyExtractor={(item, index) => "" + index}
           ListEmptyComponent={
             <View style={styles.container}>
-              <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-                <Text style={{ fontSize: 20 }}>
-                  {"No data found"}
-                </Text>
+              <View
+                style={{
+                  flex: 1,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Text style={{ fontSize: 20 }}>{"No data found"}</Text>
               </View>
             </View>
           }
-          renderItem={({ item, index }) =>
-            <View style={{
-              margin: 10,
-              flex: 1,
-              backgroundColor: constants.Colors.AuthYellow,
-              borderRadius: 10,
-              height: 90
-            }}>
-              <View style={{
-                flexDirection: "row", justifyContent: "space-between",
-              }}>
-                <View style={{
-                  height: moderateScale(50), alignItems: "flex-start",
-                  paddingLeft: 20,
-                  paddingTop: 5
-                }}>
-                  <Text style={{
-                    fontSize: moderateScale(14),
-                    color: constants.Colors.Black, fontWeight: "bold", fontSize: 16
-                  }}>
+          renderItem={({ item, index }) => (
+            <View
+              style={{
+                margin: 10,
+                flex: 1,
+                backgroundColor: constants.Colors.AuthYellow,
+                borderRadius: 10,
+                height: 90,
+              }}
+            >
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                <View
+                  style={{
+                    height: moderateScale(50),
+                    alignItems: "flex-start",
+                    paddingLeft: 20,
+                    paddingTop: 5,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: moderateScale(14),
+                      color: constants.Colors.Black,
+                      fontWeight: "bold",
+                      fontSize: 16,
+                    }}
+                  >
                     Hotspot Name: {item.name}
                   </Text>
-                  <Text style={{ fontSize: moderateScale(14), color: constants.Colors.Black }}>
+                  <Text
+                    style={{
+                      fontSize: moderateScale(14),
+                      color: constants.Colors.Black,
+                    }}
+                  >
                     Address: {item.address}
                   </Text>
-                  <Text style={{ fontSize: moderateScale(14), color: constants.Colors.Black }}>
+                  <Text
+                    style={{
+                      fontSize: moderateScale(14),
+                      color: constants.Colors.Black,
+                    }}
+                  >
                     Distance: {item.dis === 0 ? "--" : item.dis.toFixed(2)} Km
                   </Text>
-                  <Text style={{ fontSize: moderateScale(14), color: constants.Colors.Black }}>
+                  <Text
+                    style={{
+                      fontSize: moderateScale(14),
+                      color: constants.Colors.Black,
+                    }}
+                  >
                     Radius: {item.radius / 1000} Km
                   </Text>
                 </View>
               </View>
             </View>
-          }>
-        </FlatList> */}
+          )}
+        ></FlatList>
         {getHotspotsLoader && <MyActivityIndicator size="large" />}
       </View>
     );

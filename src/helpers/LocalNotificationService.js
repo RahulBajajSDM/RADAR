@@ -1,9 +1,10 @@
-import PushNotification from "react-native-push-notification";
+import PushNotification, { Importance } from "react-native-push-notification";
 import PushNotificationIOS from "@react-native-community/push-notification-ios";
 import { Platform } from "react-native";
+let channel_Id;
 
 class LocalNotificationService {
-  configure = onOpenNotification => {
+  configure = (onOpenNotification) => {
     PushNotification.configure({
       onRegister: function(token) {
         console.log("[LocalNotificationService] onRegister:", token);
@@ -31,7 +32,7 @@ class LocalNotificationService {
       permissions: {
         alert: true,
         badge: true,
-        sound: true
+        sound: true,
       },
 
       // Should the initial notification be popped automatically
@@ -45,8 +46,26 @@ class LocalNotificationService {
        * - if you are not using remote notification or do not have Firebase installed, use this:
        *     requestPermissions: Platform.OS === 'ios'
        */
-      requestPermissions: true
+      requestPermissions: true,
     });
+    PushNotification.getChannels(function(channel_ids) {
+      console.log("channel_ids", channel_ids); // ['channel_id_1']
+    });
+    PushNotification.createChannel(
+      {
+        channelId: "RADARNotiChannel", // (required)
+        channelName: "My channel", // (required)
+        channelDescription: "A channel to categorise your notifications", // (optional) default: undefined.
+        playSound: false, // (optional) default: true
+        soundName: "default", // (optional) See `soundName` parameter of `localNotification` function
+        importance: Importance.HIGH, // (optional) default: Importance.HIGH. Int value of the Android notification importance
+        vibrate: true, // (optional) default: true. Creates the default vibration patten if true.
+      },
+      (created) => {
+        console.log(`createChannel returned '${created}'`);
+        channel_Id = "RADARNotiChannel";
+      } // (optional) callback returns whether the channel was created, false means it already existed.
+    );
   };
 
   unregister = () => {
@@ -64,7 +83,7 @@ class LocalNotificationService {
       message: message || "",
       playSound: options.playSound || false,
       soundName: options.soundName || "default",
-      userInteraction: true // BOOLEAN: If the notification was opened by the user from the notification area or not
+      userInteraction: true, // BOOLEAN: If the notification was opened by the user from the notification area or not
     });
   };
 
@@ -80,7 +99,8 @@ class LocalNotificationService {
       vibration: options.vibration || 300,
       priority: options.priority || "high",
       importance: options.importance || "high", // (optional) set notification importance, default: high,
-      data: data
+      data: data,
+      channelId: channel_Id,
     };
   };
 
@@ -90,8 +110,8 @@ class LocalNotificationService {
       category: options.category || "",
       userInfo: {
         id: id,
-        item: data
-      }
+        item: data,
+      },
     };
   };
 
@@ -103,7 +123,7 @@ class LocalNotificationService {
     }
   };
 
-  removeDeliveredNotificationByID = notificationId => {
+  removeDeliveredNotificationByID = (notificationId) => {
     console.log(
       "[LocalNotificationService] removeDeliveredNotificationByID: ",
       notificationId

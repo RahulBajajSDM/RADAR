@@ -261,9 +261,15 @@ export const removeLocationStateListener = () => {
 };
 
 export const calculateUserinPolygon = (polygon_arr, current_location) => {
-  console.log(polygon_arr);
-  console.log(current_location);
-
+  console.log(JSON.stringify(polygon_arr));
+  console.log(JSON.stringify(current_location));
+  // let polygon_arr2 = [
+  //   { lat: 30.4820185612488, lng: 76.19807346201173 },
+  //   { lat: 30.491485990914892, lng: 76.72541721201173 },
+  //   { lat: 30.114448059989375, lng: 76.58534152841798 },
+  //   { lat: 30.07286172873205, lng: 76.21592624521486 },
+  // ];
+  // let current_location2 = { lat: 30.3201822, lng: 76.3947905 };
   return new Promise((resolve, reject) => {
     GeoFencing.containsLocation(current_location, polygon_arr)
       .then(() => {

@@ -112,14 +112,14 @@ Get the Fcm token of the device
 //   }
 // };
 
-export const pushNotifificationInit = async store => {
+export const pushNotifificationInit = async (store) => {
   messaging()
     .getToken()
-    .then(token => {
+    .then((token) => {
       console.log("firebase_token", token);
       store.dispatch({
         type: types.SET_FCM_DEVICE_TOKEN,
-        payload: token
+        payload: token,
       });
       requestUserPermission();
       registerListeners(store);
@@ -138,10 +138,10 @@ async function requestUserPermission() {
 }
 
 async function registerListeners(store) {
-  messaging().onMessage(async remoteMessage => {
+  messaging().onMessage(async (remoteMessage) => {
     console.log("MESSAGING :::::::::::", remoteMessage);
   });
-  messaging().onNotificationOpenedApp(remoteMessage => {
+  messaging().onNotificationOpenedApp((remoteMessage) => {
     console.log(
       "Notification caused app to open from background state:",
       remoteMessage.notification
@@ -152,7 +152,7 @@ async function registerListeners(store) {
   // Check whether an initial notification is available
   messaging()
     .getInitialNotification()
-    .then(remoteMessage => {
+    .then((remoteMessage) => {
       if (remoteMessage) {
         console.log(
           "Notification caused app to open from quit state:",
@@ -181,10 +181,10 @@ class FCMService {
     }
   };
 
-  checkPermission = onRegister => {
+  checkPermission = (onRegister) => {
     messaging()
       .hasPermission()
-      .then(enabled => {
+      .then((enabled) => {
         if (enabled) {
           // User has permissions
           this.getToken(onRegister);
@@ -193,33 +193,33 @@ class FCMService {
           this.requestPermission(onRegister);
         }
       })
-      .catch(error => {
+      .catch((error) => {
         console.log("[FCMService] Permission rejected ", error);
       });
   };
 
-  getToken = onRegister => {
+  getToken = (onRegister) => {
     messaging()
       .getToken()
-      .then(fcmToken => {
+      .then((fcmToken) => {
         if (fcmToken) {
           onRegister(fcmToken);
         } else {
           console.log("[FCMService] User does not have a device token");
         }
       })
-      .catch(error => {
+      .catch((error) => {
         console.log("[FCMService] getToken rejected ", error);
       });
   };
 
-  requestPermission = onRegister => {
+  requestPermission = (onRegister) => {
     messaging()
       .requestPermission()
       .then(() => {
         this.getToken(onRegister);
       })
-      .catch(error => {
+      .catch((error) => {
         console.log("[FCMService] Request Permission rejected ", error);
       });
   };
@@ -228,7 +228,7 @@ class FCMService {
     console.log("[FCMService] deleteToken ");
     messaging()
       .deleteToken()
-      .catch(error => {
+      .catch((error) => {
         console.log("[FCMService] Delete token error ", error);
       });
   };
@@ -239,7 +239,7 @@ class FCMService {
     onOpenNotification
   ) => {
     // When the application is running, but in the background
-    messaging().onNotificationOpenedApp(remoteMessage => {
+    messaging().onNotificationOpenedApp((remoteMessage) => {
       console.log(
         "[FCMService] onNotificationOpenedApp Notification caused app to open from background state:",
         remoteMessage
@@ -254,21 +254,21 @@ class FCMService {
     // When the application is opened from a quit state.
     messaging()
       .getInitialNotification()
-      .then(remoteMessage => {
+      .then((remoteMessage) => {
         console.log(
           "[FCMService] getInitialNotification Notification caused app to open from quit state:",
           remoteMessage
         );
 
         if (remoteMessage) {
-          const notification = remoteMessage.notification;
+          const notification = remoteMessage;
           onOpenNotification(notification, 2);
           //  this.removeDeliveredNotification(notification.notificationId)
         }
       });
 
     // Foreground state messages
-    this.messageListener = messaging().onMessage(async remoteMessage => {
+    this.messageListener = messaging().onMessage(async (remoteMessage) => {
       console.log("[FCMService] A new FCM message arrived!", remoteMessage);
       if (remoteMessage) {
         let notification = null;
@@ -283,7 +283,7 @@ class FCMService {
     });
 
     // Triggered when have new token
-    messaging().onTokenRefresh(fcmToken => {
+    messaging().onTokenRefresh((fcmToken) => {
       console.log("[FCMService] New token refresh: ", fcmToken);
       onRegister(fcmToken);
     });

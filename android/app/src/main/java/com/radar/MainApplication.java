@@ -38,6 +38,7 @@ import com.oblador.vectoricons.VectorIconsPackage;
 
 import com.showlocationservicesdialogbox.LocationServicesDialogBoxPackage;
 import de.patwoz.rn.bluetoothstatemanager.RNBluetoothStateManagerPackage;
+import com.surialabs.rn.geofencing.GeoFencingPackage;// <--
 
 public class MainApplication extends NavigationApplication {
 
@@ -74,7 +75,9 @@ public class MainApplication extends NavigationApplication {
                                     new ReactNativeFirebaseMessagingPackage(),
                                     new ReactNativePushNotificationPackage(),
                                     new LocationServicesDialogBoxPackage(),
-                                    new RNBluetoothStateManagerPackage()
+                                    new RNBluetoothStateManagerPackage(),
+                                    new GeoFencingPackage()
+
                                     // eg. new VectorIconsPackage()
                             );
         }

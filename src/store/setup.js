@@ -112,7 +112,7 @@ function onNotification(remoteMessage) {
 }
 
 function onOpenNotification(remoteMessage, state) {
-  // console.log("[App] onOpenNotification: ", remoteMessage);
+  console.log("[App] onOpenNotification: ", remoteMessage);
   let { selectedScreen, screenName } = storeObj.store.getState().app;
   let message = remoteMessage.data.message;
   let jsonMessage = message && JSON.parse(message);
@@ -124,12 +124,23 @@ function onOpenNotification(remoteMessage, state) {
       type: types.SAVE_QUESTIONNAIRE_ID,
       payload: jsonMessage.questioinnaireId,
     });
+    let timer = 2500;
+    console.log(
+      "moving to Questionareeeeeee *********************************",
+      state === 2 ? timer : state === 1 ? 1500 : 0
+    );
+    console.log("state is ", state);
     setTimeout(
-      () =>
+      () => {
+        console.log("print after timer", selectedScreen);
         storeObj.store.dispatch(
-          pushToParticularScreen(selectedScreen, "Questionnaire")
-        ),
-      state === 2 ? 2500 : state === 1 ? 1500 : 0
+          pushToParticularScreen(
+            selectedScreen == null ? "Tab3" : selectedScreen,
+            "Questionnaire"
+          )
+        );
+      },
+      state === 2 ? timer : state === 1 ? 1500 : 0
     );
   } else {
     alert(

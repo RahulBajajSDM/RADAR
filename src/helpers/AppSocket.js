@@ -9,7 +9,8 @@ import { goToAuth } from "../config/navigation";
 let client;
 export const initsocket = (dispatch, getState) => {
   console.log("socketurl", Connection.getSOCKETBaseUrl());
-  client = SocketIOClient("https://www.radarappsdei.org/", {
+  // client = SocketIOClient("https://www.radarappsdei.org/", {
+  client = SocketIOClient(Connection.getSOCKETBaseUrl(), {
     secure: true,
     rejectUnauthorized: false,
     transports: ["websocket"],

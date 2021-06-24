@@ -18,6 +18,7 @@ const initialState = {
   posimationDelLoader: false,
   addQuestionnaire: false,
   infermedicaLoader: false,
+  contentLoader: false,
 };
 
 const user = (state = initialState, action) => {
@@ -145,6 +146,22 @@ const user = (state = initialState, action) => {
       return { ...state, infermedicaLoader: false };
     case Types.INFERMEDICA_LOADER_ON:
       return { ...state, infermedicaLoader: true };
+
+    case Types.GET_CONTENT_LOADER_REQUEST:
+      return {
+        ...state,
+        contentLoader: true,
+      };
+    case Types.GET_CONTENT_LOADER_SUCCESS:
+      return {
+        ...state,
+        contentLoader: false,
+      };
+    case Types.GET_CONTENT_LOADER_ERROR:
+      return {
+        ...state,
+        contentLoader: false,
+      };
     default:
       return state;
   }

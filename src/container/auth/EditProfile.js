@@ -320,6 +320,7 @@ class EditProfile extends Component {
               inputWrapper={styles.inputWrapper}
               label={"Employee Id"}
               value={employeeId}
+              editable={false}
               onChangeText={(employeeId) => {
                 this.setState({ employeeId, employeeIdError: "" });
               }}

@@ -144,6 +144,7 @@ let Strings = {
       COVIDAssesment: "COVID-19 Assesment",
       ChangeMyPassword: "Change My Password",
       Logout: "Log out",
+      privacyPolicy: "Privacy Policy",
     },
     Faq: "FAQ",
     privacyPolicy: "Privacy Policy",

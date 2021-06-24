@@ -186,27 +186,33 @@ class SideMenu extends Component {
           enable: true,
           marginTop: true,
           onPress: () => {
-            console.log("I am here ---------------");
-            // this.pushToParticularScreen("CovidAssesment", false);
+            this.pushToParticularScreen("WebView", false, {
+              uri: Constants.Url.FAQs,
+              type: 0,
+            });
           },
         },
         {
-          title: Constants.Strings.SideMenu.privacyPolicy,
+          title: Constants.Strings.SideMenu.Settings.privacyPolicy,
           enable: true,
           marginTop: false,
-          onPress: () => {},
-          // this.pushToParticularScreen("WebView", false, {
-          //   uri: Constants.Url.privacyPolicy,
-          // }),
+          onPress: () => {
+            this.pushToParticularScreen("WebView", false, {
+              uri: Constants.Url.privacyPolicy,
+              type: 1,
+            });
+          },
         },
         {
           title: Constants.Strings.SideMenu.TermsofService,
           enable: true,
           marginTop: false,
-          onPress: () => {},
-          // this.pushToParticularScreen("WebView", false, {
-          //   uri: Constants.Url.termsofService,
-          // }),
+          onPress: () => {
+            this.pushToParticularScreen("WebView", false, {
+              uri: Constants.Url.termsofService,
+              type: 2,
+            });
+          },
         },
         {
           title: Constants.Strings.SideMenu.Settings.Logout,
